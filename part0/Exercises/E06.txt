@@ -1,0 +1,9 @@
+Exercise 0.6
+
+browser -> server: https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+server -> browser: HTML code
+
+note over browser: 
+starts executing js-code that pushes a new note to the list and redraws notes as well as sends them to the server.
+end note
+
