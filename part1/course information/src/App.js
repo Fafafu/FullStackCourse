@@ -42,7 +42,6 @@ const App = () => {
       <Total exercise1={exercises1} exercise2={exercises2} exercise3={exercises3}/>
     </div>
   )
-
 }
 
 
