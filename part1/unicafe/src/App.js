@@ -28,23 +28,25 @@ const Total = (props) => {
   )
 }
 
-const App = () => { // App includes the REACT component Hello in this case
+  const App = () => { // App includes the REACT components
 
-  const course = 'Half Stack application development'
-  const parts = [
-    {
-      name: 'Fundamentals of React',
-      exercises: 10
-    },
-    {
-      name: 'Using props to pass data',
-      exercises: 7
-    },
-    {
-      name: 'State of a component',
-      exercises: 14
-    }
-  ]
+    const course = {
+      name: 'Half Stack application development',
+      parts: [
+      {
+        name: 'Fundamentals of React',
+        exercises: 10
+      },
+      {
+        name: 'Using props to pass data',
+        exercises: 7
+      },
+      {
+        name: 'State of a component',
+        exercises: 14
+      }
+    ]
+  }
 /*      <Content name={parts[0].name} exercises={parts[0].exercises}/>
       <Content name={parts[1].name} exercises={parts[1].exercises}/>
       <Content name={parts[2].name} exercises={parts[2].exercises}/> 
@@ -52,9 +54,9 @@ const App = () => { // App includes the REACT component Hello in this case
 
   return (
     <div>
-      <Header course={course}/>
-      <Content parts={parts}/>
-      <Total parts={parts}/>
+      <Header course={course.name}/>
+      <Content parts={course.parts}/>
+      <Total parts={course.parts}/>
     </div>
   )
 }
