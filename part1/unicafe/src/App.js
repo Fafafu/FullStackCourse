@@ -1,66 +1,72 @@
+import { useState } from 'react'
+ 
 
+
+
+//React components
 const Header = (props) => {
-  console.log(props)
+  console.log("Header props",props)
   return(
-  <>
-    <h1>{props.course}</h1>
-  </>
+    <h2>{props.text}</h2>
   )
 }
 
-const Content = (props) => {
-  console.log(props)
+const Button = ({handleClick, text}) => {
+  console.log("Button props", handleClick, text)
   return (
-    <>
-    <p>{props.parts[0].name} {props.parts[0].exercises}</p>
-    <p>{props.parts[1].name} {props.parts[1].exercises}</p>
-    <p>{props.parts[2].name} {props.parts[2].exercises}</p>
-    </>
+    <button onClick={handleClick}>{text}</button>
   )
 }
 
-const Total = (props) => {
-  console.log(props)
+const DisplayStats = ({text, number}) => {
+  return(
+    <p>{text} {number}</p>
+  )
+}
+
+
+
+const App = () => {
+
+//States
+const [goodRatings, setGood] = useState(0) 
+const [badRatings, setBad] = useState(0) 
+const [neutralRatings, setNeutral] = useState(0)
+const [allRatings, setAll] = useState([]) 
+
+//Functions
+const increase = (value) => 
+  value+1
+
+const average = (good,neutral,bad) => {
+  return(
+    (good - bad)/(good+neutral+bad)
+  )
+}
+
+const percentageGood = (good,neutral,bad) => {
+  return(
+    (good / (good+neutral+bad)) + "%"
+  )
+}
+  
+
+//JSX
   return (
-    <>
-    <p>Number of exercises {props.parts[0].exercises + props.parts[1].exercises  + props.parts[2].exercises }</p>
-    </>
-  )
+<div>
+    <Header text={'give feedback'}/>
+    <Button handleClick={() => setGood(increase(goodRatings))} text='good'/>
+    <Button handleClick={() => setNeutral(increase(neutralRatings))} text='neutral'/>
+    <Button handleClick={() => setBad(increase(badRatings))} text='bad'/>
+
+    <Header text={'statistics'}/>
+    <DisplayStats text='good' number={goodRatings}/>
+    <DisplayStats text='neutral' number={neutralRatings}/>
+    <DisplayStats text='bad' number={badRatings}/>
+    <DisplayStats text='average' number={average(goodRatings,neutralRatings,badRatings)}/>
+    <DisplayStats text='positive' number={percentageGood(goodRatings,neutralRatings,badRatings)}/>
+</div>
+)
 }
-
-  const App = () => { // App includes the REACT components
-
-    const course = {
-      name: 'Half Stack application development',
-      parts: [
-      {
-        name: 'Fundamentals of React',
-        exercises: 10
-      },
-      {
-        name: 'Using props to pass data',
-        exercises: 7
-      },
-      {
-        name: 'State of a component',
-        exercises: 14
-      }
-    ]
-  }
-/*      <Content name={parts[0].name} exercises={parts[0].exercises}/>
-      <Content name={parts[1].name} exercises={parts[1].exercises}/>
-      <Content name={parts[2].name} exercises={parts[2].exercises}/> 
-      <Total exercise1={parts[0].exercises} exercise2={parts[1].exercises} exercise3={parts[2].exercises}/>*/
-
-  return (
-    <div>
-      <Header course={course.name}/>
-      <Content parts={course.parts}/>
-      <Total parts={course.parts}/>
-    </div>
-  )
-}
-
-
 
 export default App
