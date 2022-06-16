@@ -1,5 +1,6 @@
 import { useState } from 'react'
  
+//init
 
 
 
@@ -17,13 +18,15 @@ const Button = ({handleClick, text}) => {
     <button onClick={handleClick}>{text}</button>
   )
 }
-/* No longer used. Replaced by component Statistics
-const DisplayStats = ({text, number}) => {
+
+const StatisticsLine = ({text, number}) => {
   return(
-    <p>{text} {number}</p>
+    <tr>
+      <td>{text} </td><td> {number}</td>
+    </tr>
   )
 }
-*/
+
 const Statistics = ({stats}) => {
   console.log('Statistics', stats)
   if (isNaN(stats.average.num)) { //Average is 'NaN' if no feedback has been gathered. 
@@ -31,14 +34,24 @@ const Statistics = ({stats}) => {
   }
   else
     return(
-      <>
-      <p>{stats.good.text} {stats.good.num}</p>
-      <p>{stats.neutral.text} {stats.neutral.num}</p>
-      <p>{stats.bad.text} {stats.bad.num}</p>
-      <p>{stats.average.text} {stats.average.num}</p>
-      <p>{stats.positive.text} {stats.positive.num}</p>
-      </>
+      <table>
+        <tbody>
+          <StatisticsLine text={stats.good.text} number={stats.good.num}/>
+          <StatisticsLine text={stats.neutral.text} number={stats.neutral.num}/>
+          <StatisticsLine text={stats.bad.text} number={stats.bad.num}/>
+          <StatisticsLine text={stats.average.text} number={stats.average.num}/>
+          <StatisticsLine text={stats.positive.text} number={stats.positive.num}/>
+        </tbody>
+      </table>
     )
+}
+
+const DisplayText = ({text}) => {
+  return(
+    <p>{text}</p>
+  )
+    
+  
 }
 
 
@@ -48,6 +61,9 @@ const App = () => {
   const [goodRatings, setGood] = useState(0) 
   const [badRatings, setBad] = useState(0) 
   const [neutralRatings, setNeutral] = useState(0)
+  const [anecdoteIdx, setAnecdoteIdx] = useState(0)
+  const [votes, setVotes] = useState([0,0,0,0,0,0,0]) // RISK! Fixed number
+
 
   //Functions
   const increase = (value) => 
@@ -64,7 +80,34 @@ const App = () => {
       (good / (good+neutral+bad)) + "%"
     )
   }
-    
+ 
+  const vote = (idx) => {
+    const copy = [...votes]
+    copy[idx] += 1
+    setVotes(copy)
+  }
+
+//Support functions  
+  const getRandomInt = (max) => {
+    return (
+      Math.floor(Math.random() * max)
+    )
+  }
+
+  const getIdxOfMax = (arr) => {
+    const max = Math.max(...arr)
+    return(
+      arr.indexOf(max)
+    )
+  }
+/*
+  const zip = (a1, a2) => { 
+    return(
+      a1.map((x, i) => [x, a2[i]])
+    )
+  }
+*/
+
 
   //Variables
   const stats = {
@@ -90,18 +133,33 @@ const App = () => {
     }
   }
 
-
+  const anecdotes = [
+    'If it hurts, do it more often',
+    'Adding manpower to a late software project makes it later!',
+    'The first 90 percent of the code accounts for the first 10 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
+    'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
+    'Premature optimization is the root of all evil.',
+    'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
+    'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients'
+  ]
 
 
   //JSX
     return (
   <div>
-      <Header text={'give feedback'}/>
+      <Header text={'Give feedback'}/>
       <Button handleClick={() => setGood(increase(goodRatings))} text='good'/>
       <Button handleClick={() => setNeutral(increase(neutralRatings))} text='neutral'/>
       <Button handleClick={() => setBad(increase(badRatings))} text='bad'/>
-      <Header text={'statistics'}/>
+      <Header text={'Statistics'}/>
       <Statistics stats={stats}/>
+      <Header text={'Anecdotes'}/>  
+      <Button handleClick={() => setAnecdoteIdx(getRandomInt(anecdotes.length-1))} text='Next anecdote'/>
+      <Button handleClick={() => vote(anecdoteIdx)} text='Vote'/>
+      <DisplayText text={anecdotes[anecdoteIdx] +'.  ' +votes[anecdoteIdx] + ' votes.'}/>  
+      <Header text={'Anecdote with most votes'}/>
+      <DisplayText text={anecdotes[getIdxOfMax(votes)] +'.  ' +votes[getIdxOfMax(votes)] + ' votes.'}/>  
+
   </div>
   )
 }
