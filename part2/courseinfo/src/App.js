@@ -22,22 +22,27 @@ const Total = (props) => {
   console.log('Total', props)
   return (
     <>
-    <p>Number of exercises {props.exercise1 + props.exercise2 + props.exercise3}</p>
+    <p>Number of exercises {props.sum}</p>
     </>
   )
 }
 
 const Course = (props) => {
   console.log('Course', props)
-  const course = props.course
-  const parts = props.course.parts
+  const parts = props.course.parts //Array of parts.
+
   return(<div>
-    <Header header={course.name}/>
+    <Header header={props.course.name}/>
     <ul>
       {parts.map(part =>
-      <Part key={part.id} part={part.name} exercises={part.exercises}/>
+        <Part key={part.id} part={part.name} exercises={part.exercises}/>
       )}
     </ul>
+    <Total
+      sum={parts.reduce((sum, part) => 
+            sum + part.exercises, 0
+          )}
+    />
   </div>)
 }
 
@@ -73,6 +78,10 @@ const App = () => {
       }
     ]
   }
+
+  //Functions
+
+
 
   return(
     <div>
